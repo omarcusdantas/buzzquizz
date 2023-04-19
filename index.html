@@ -8,6 +8,7 @@
         <!-- CSS -->
         <link rel="stylesheet" href="./css/reset.css">
         <link rel="stylesheet" href="./css/styles.css">
+        <link rel="stylesheet" href="./css/create-quiz.css">
 
         <title>BuzzQuizz</title>
     </head>
@@ -21,7 +22,7 @@
             <div class="my-quizzes">
                 <div id="empty" class="empty">
                     <p>Você não criou nenhum quizz ainda :(</p>
-                    <button data-test="create-btn" class="create-quiz">
+                    <button data-test="create-btn" class="create-quiz-button" onclick="toggleCreateQuiz()">
                         <p>Criar Quizz</p>
                     </button>
                 </div>
@@ -31,6 +32,21 @@
                 <div class="cards"></div>
             </div>
         </div>
+        <!-- ------------------- -->
+
+        <!-- Page-3 -->
+            <div class="create-quiz hidden">
+                <h2 class="create-quiz-title">Comece pelo começo</h2>
+                <div class="inputs-container">
+                    <input type="text" placeholder="Título do seu quiz">
+                    <input type="text" placeholder="URL da imagem do seu quiz">
+                    <input type="text" placeholder="Quantidade de perguntas do quiz">
+                    <input type="text" placeholder="Quantidade de níveis do quiz">
+                </div>
+                <div class="button-container">
+                    <button onclick="createQuestions()">Prosseguir pra criar perguntas</button>
+                </div>
+            </div>
         <!-- ------------------- -->
 
         <!-- Ion-icon -->
