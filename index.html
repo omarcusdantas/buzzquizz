@@ -38,10 +38,10 @@
             <div class="create-quiz hidden">
                 <h2 class="create-quiz-title">Comece pelo começo</h2>
                 <div class="inputs-container">
-                    <input type="text" placeholder="Título do seu quiz">
-                    <input type="text" placeholder="URL da imagem do seu quiz">
-                    <input type="text" placeholder="Quantidade de perguntas do quiz">
-                    <input type="text" placeholder="Quantidade de níveis do quiz">
+                    <input id="quizTitleCreation" type="text" placeholder="Título do seu quiz">
+                    <input id="quizImageCreation" type="text" placeholder="URL da imagem do seu quiz">
+                    <input id="numberQuestionsCreation" type="text" placeholder="Quantidade de perguntas do quiz">
+                    <input id="numberLevelsCreation" type="text" placeholder="Quantidade de níveis do quiz">
                 </div>
                 <div class="button-container">
                     <button onclick="createQuestions()">Prosseguir pra criar perguntas</button>
@@ -58,6 +58,7 @@
 
         <!-- Pages -->
         <script src="./js/page-1.js"></script>
+        <script src="./js/create-quiz.js"></script>
     </body>
 
 </html>
