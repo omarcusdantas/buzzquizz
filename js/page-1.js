@@ -6,12 +6,13 @@ const myQuizzes = document.querySelector(".my-quizzes");
 const quizzesCard = document.querySelector(".all-quizzes .cards");
 // -------------------------------------
 // Functionalities
+function renderQuizzes(data, htmlElement, isOurQuiz = false) {
+  htmlElement.innerHTML = isOurQuiz
+    ? '<h2 class="section-title">Seus Quizzes</h2>'
+    : "";
 
-function renderQuizzes(data) {
-  console.log(data);
-  quizzesCard.innerHTML = "";
   data.forEach((quiz) => {
-    quizzesCard.innerHTML += `
+    htmlElement.innerHTML += `
       <div class="card">
         <img src=${quiz.image} />
         <h2>${quiz.title}</h2>
@@ -20,4 +21,18 @@ function renderQuizzes(data) {
   });
 }
 
-axios.get(getQuizzesURL).then((res) => renderQuizzes(res.data));
+axios.get(getQuizzesURL).then((res) => {
+  console.log(res.data);
+  const localKeys = Object.keys({ ...localStorage }).filter((key) =>
+    // Convenção do valor para os quizzes criados, para indentificação
+    key.match(/(buzzQuizz-\w+)/)
+  );
+  const ourQuizzes = localKeys.map((key) =>
+    JSON.parse(localStorage.getItem(key))
+  );
+  console.log(ourQuizzes);
+  renderQuizzes(res.data, quizzesCard);
+  if (Object.keys(ourQuizzes).length) {
+    renderQuizzes(ourQuizzes, myQuizzes, true);
+  }
+});
