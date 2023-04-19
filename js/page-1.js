@@ -8,23 +8,27 @@ const quizzesCard = document.querySelector(".all-quizzes .cards");
 // Functionalities
 function renderQuizzes(data, htmlElement, isOurQuiz = false) {
   htmlElement.innerHTML = isOurQuiz
-    ? '<h2 class="section-title">Seus Quizzes</h2>'
+    ? `<div class="my-quizzes-header">
+        <h2 class="section-title">Seus Quizzes</h2>
+        <ion-icon data-test="create-btn" name="add-circle"></ion-icon>
+      <div>`
     : "";
 
   data.forEach((quiz) => {
     htmlElement.innerHTML += `
-      <div class="card">
+      <div data-test=${isOurQuiz ? "my-quiz" : "others-quiz"} class="card">
         <img src=${quiz.image} />
         <h2>${quiz.title}</h2>
         <div class="edit-quizz ${isOurQuiz ? "" : "hidden"}">
-          <ion-icon id="create-quizz" name="create"></ion-icon>
-          <ion-icon id="delete-quizz" name="trash"></ion-icon>
+          <ion-icon data-test="edit" id="edit-quizz" name="create"></ion-icon>
+          <ion-icon data-test="delete" id="delete-quizz" name="trash"></ion-icon>
         </div>
       </div>      
     `;
   });
 }
 
+// Quizzes Request
 axios.get(getQuizzesURL).then((res) => {
   console.log(res.data);
   const localKeys = Object.keys({ ...localStorage }).filter((key) =>
