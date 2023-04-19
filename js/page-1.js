@@ -3,12 +3,21 @@ axios.defaults.headers.common["Authorization"] = "U6fPRnXorrTvHpB1OupJQJXj";
 const getQuizzesURL = "https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes";
 // DOM elements
 const myQuizzes = document.querySelector(".my-quizzes");
-const allQuizzes = document.querySelector(".all-quizzes");
+const quizzesCard = document.querySelector(".all-quizzes .cards");
 // -------------------------------------
 // Functionalities
 
-function retrieveQuizzes() {
-  axios.get(getQuizzesURL).then((res) => console.log(res));
+function renderQuizzes(data) {
+  console.log(data);
+  quizzesCard.innerHTML = "";
+  data.forEach((quiz) => {
+    quizzesCard.innerHTML += `
+      <div class="card">
+        <img src=${quiz.image} />
+        <h2>${quiz.title}</h2>
+      </div>
+    `;
+  });
 }
 
-retrieveQuizzes();
+axios.get(getQuizzesURL).then((res) => renderQuizzes(res.data));
