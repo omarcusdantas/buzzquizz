@@ -6,7 +6,7 @@
 
 /* Shared classes */
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .card {
@@ -189,4 +189,36 @@ header {
 
     color: #FFFFFF;
 
+}
+
+.edit-quizz {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+
+    position: absolute;
+
+    top: 15px;
+    right: 5px;
+
+    width: 43px;
+    height: 87px;
+
+    background: #EC362D;
+    border-radius: 10px 0px 0px 11px;
+}
+
+.edit-quizz>ion-icon {
+    cursor: pointer;
+
+    width: 20px;
+    height: 20px;
+
+    color: #FFF;
+}
+
+.edit-quizz>ion-icon:hover {
+    opacity: 0.6;
+    scale: 1.02;
 }

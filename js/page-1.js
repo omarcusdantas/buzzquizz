@@ -16,7 +16,11 @@ function renderQuizzes(data, htmlElement, isOurQuiz = false) {
       <div class="card">
         <img src=${quiz.image} />
         <h2>${quiz.title}</h2>
-      </div>
+        <div class="edit-quizz ${isOurQuiz ? "" : "hidden"}">
+          <ion-icon id="create-quizz" name="create"></ion-icon>
+          <ion-icon id="delete-quizz" name="trash"></ion-icon>
+        </div>
+      </div>      
     `;
   });
 }
