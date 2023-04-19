@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- CSS -->
+        <link rel="stylesheet" href="./css/reset.css">
+        <link rel="stylesheet" href="./css/styles.css">
+
+        <title>BuzzQuizz</title>
+    </head>
+
+    <body>
+        <header>
+            <h1 class="header-title">BuzzQuizz</h1>
+        </header>
+        <!-- Page-1 -->
+        <div class="page-1 mt">
+            <div class="my-quizzes">
+                <div id="empty" class="empty">
+                    <p>Você não criou nenhum quizz ainda :(</p>
+                    <button class="create-quiz">Criar Quizz</button>
+                </div>
+            </div>
+            <div class="all-quizzes">
+                <h2 class="all-quizzes-title">Todos os Quizzes</h2>
+                <div class="cards"></div>
+            </div>
+        </div>
+        <!-- ------------------- -->
+
+
+        <!-- Axios -->
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+        <!-- Pages -->
+        <script src="./js/page-1.js"></script>
+    </body>
+
+</html>

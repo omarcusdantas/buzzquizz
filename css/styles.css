@@ -1,0 +1,174 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700;1,900&display=swap');
+
+
+* {
+    box-sizing: border-box;
+}
+
+/* Shared classes */
+.hidden {
+    display: none;
+}
+
+.card {
+    width: 340px;
+    height: 181px;
+
+    border-radius: 5px;
+}
+
+/* Compenssar a altura do header */
+.mt {
+    margin-top: 146px;
+}
+
+@media screen and (max-width: 480px) {
+    .mt {
+        margin-top: 100px;
+    }
+}
+
+/* ---------------------- */
+
+h1,
+h2,
+h3,
+h4,
+p {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 69px;
+
+    background-color: #EC362D;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.header-title {
+    font-weight: 700;
+    font-size: 37px;
+
+    color: rgba(255, 255, 255, 1);
+}
+
+/* Page 1 */
+.page-1 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    max-width: 1050px;
+    width: 90%;
+}
+
+.my-quizzes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 100%;
+}
+
+.empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 181px;
+
+    gap: 30px;
+    background: #FAFAFA;
+    border: 1px dashed #D5D5D5;
+    border-radius: 5px;
+}
+
+.empty>p {
+    width: 250px;
+    text-align: center;
+
+    font-weight: 400;
+    font-size: 20px;
+    color: #B9B9B9;
+}
+
+.empty>.create-quiz {
+    width: 151px;
+    height: 40px;
+
+    border: 1px dashed rgba(236, 54, 45, 1);
+    border-radius: 35px;
+    background-color: white;
+    color: #EC362D;
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 21px;
+}
+
+.all-quizzes {
+    margin-top: 77px;
+}
+
+@media screen and (max-width: 480px) {
+    .all-quizzes {
+        margin-top: 31px;
+    }
+}
+
+.all-quizzes-title {
+    font-weight: 700;
+    font-size: 20px;
+
+    margin-bottom: 15px;
+}
+
+.cards {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
+
+    gap: 15px;
+}
+
+@media screen and (max-width: 480px) {
+    .cards {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+
+        gap: 15px;
+    }
+}
+
+.card {
+    width: 340px;
+    height: 181px;
+
+    border-radius: 5px;
+}
