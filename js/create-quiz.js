@@ -24,7 +24,21 @@ function returnMainPage() {
     `;
 }
 
-function sendQuizz() {
+function quizCreated() {
+  createQuizScreen.innerHTML = `
+    <h2 class="create-quiz-title">Seu quizz está pronto!</h2>
+    <div class="quiz-creation-banner">
+        <img src="${quizImageUrl}">
+        <p class="quiz-created-title">${quizTitle}</p>
+    </div>
+    <div class="button-container">
+        <button>Acessar Quizz</button>
+        <button onclick="returnMainPage()">Voltar pra home</button>
+    </div>
+    `;
+}
+
+function sendQuiz() {
   const data = {
     title: quizTitle,
     image: quizImageUrl,
@@ -33,7 +47,7 @@ function sendQuizz() {
   };
 
   //   Mandando para o servidor e armazenando localmente
-  axios
+  /* axios
     .post("https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes", data)
     .then((res) => {
       console.log(res.data);
@@ -41,7 +55,10 @@ function sendQuizz() {
         `buzzQuizz-${Object.keys({ ...localStorage }).length}`,
         JSON.stringify(data)
       );
-    });
+      quizCreated();
+    }); */
+  console.log(data);
+  quizCreated();
 }
 
 function saveLevels() {
@@ -66,20 +83,10 @@ function saveLevels() {
   }
 }
 
-function quizCreated() {
-  saveLevels();
-  sendQuizz();
-  createQuizScreen.innerHTML = `
-    <h2 class="create-quiz-title">Seu quizz está pronto!</h2>
-    <div class="quiz-creation-banner">
-        <img src="${quizImageUrl}">
-        <p class="quiz-created-title">${quizTitle}</p>
-    </div>
-    <div class="button-container">
-        <button>Acessar Quizz</button>
-        <button onclick="returnMainPage()">Voltar pra home</button>
-    </div>
-    `;
+async function saveQuiz() {
+  const levels = await saveLevels();
+  const send = levels;
+  sendQuiz(); 
 }
 
 function toggleLevel(levelButton) {
@@ -166,7 +173,7 @@ function renderLevelsCreation() {
         <h2 class="create-quiz-title">Agora, decida os níveis!</h2>
         ${inputs}
         <div class="button-container">
-            <button onclick="quizCreated()">Finalizar Quizz</button>
+            <button onclick="saveQuiz()">Finalizar Quizz</button>
         </div>
     `;
 }
