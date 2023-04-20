@@ -20,8 +20,8 @@ function renderQuizzes(data, htmlElement, isOurQuiz = false) {
         <img src=${quiz.image} />
         <h2>${quiz.title}</h2>
         <div class="edit-quizz ${isOurQuiz ? "" : "hidden"}">
-          <ion-icon data-test="edit" id="edit-quizz" name="create"></ion-icon>
-          <ion-icon data-test="delete" id="delete-quizz" name="trash"></ion-icon>
+          <ion-icon onclick="editQuizz()" data-test="edit" id="edit-quizz" name="create"></ion-icon>
+          <ion-icon onclick="deleteQuizz()" data-test="delete" id="delete-quizz" name="trash"></ion-icon>
         </div>
       </div>      
     `;
@@ -30,15 +30,14 @@ function renderQuizzes(data, htmlElement, isOurQuiz = false) {
 
 // Quizzes Request
 axios.get(getQuizzesURL).then((res) => {
-  console.log(res.data);
   const localKeys = Object.keys({ ...localStorage }).filter((key) =>
-    // Convenção do valor para os quizzes criados, para indentificação
+    // Convenção do valor para os quizzezs criados, para indentificação
     key.match(/(buzzQuizz-\w+)/)
   );
   const ourQuizzes = localKeys.map((key) =>
     JSON.parse(localStorage.getItem(key))
   );
-  console.log(ourQuizzes);
+
   renderQuizzes(res.data, quizzesCard);
   if (Object.keys(ourQuizzes).length) {
     renderQuizzes(ourQuizzes, myQuizzes, true);

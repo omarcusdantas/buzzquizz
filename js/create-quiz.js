@@ -1,14 +1,16 @@
 const createQuizScreen = document.querySelector(".create-quiz");
-let numberQuestions, numberLevels, quizImageUrl;
+let numberQuestions, numberLevels, quizImageUrl, quizTitle;
+const questions = [],
+  levels = [];
 
 function toggleCreateQuiz() {
-    document.querySelector(".page-1").classList.toggle("hidden");
-    createQuizScreen.classList.toggle("hidden");
+  document.querySelector(".page-1").classList.toggle("hidden");
+  createQuizScreen.classList.toggle("hidden");
 }
 
 function returnMainPage() {
-    toggleCreateQuiz();
-    createQuizScreen.innerHTML = `
+  toggleCreateQuiz();
+  createQuizScreen.innerHTML = `
         <h2 class="create-quiz-title">Comece pelo começo</h2>
         <div class="inputs-container">
             <input id="quizTitleCreation" type="text" placeholder="Título do seu quiz">
@@ -22,65 +24,145 @@ function returnMainPage() {
     `;
 }
 
+function sendQuizz() {
+  const data = {
+    title: quizTitle,
+    image: quizImageUrl,
+    questions,
+    levels,
+  };
+
+  //   Mandando para o servidor e armazenando localmente
+  axios
+    .post("https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes", data)
+    .then((res) => {
+      console.log(res.data);
+      localStorage.setItem(
+        `buzzQuizz-${Object.keys({ ...localStorage }).length}`,
+        JSON.stringify(data)
+      );
+    });
+}
+
+function saveLevels() {
+  const getValue = (id) => {
+    return document.getElementById(id) !== null
+      ? document.getElementById(id).value
+      : false;
+  };
+  for (let i = 1; i <= numberLevels; i++) {
+    const title = getValue(`tL-${i}`);
+    const image = getValue(`imgL-${i}`);
+    const text = getValue(`l${i}-desc`);
+    const minValue = getValue(`perc-${i}`);
+
+    if (title && image && text && minValue)
+      levels.push({
+        title,
+        image,
+        text,
+        minValue,
+      });
+  }
+}
+
 function quizCreated() {
-    createQuizScreen.innerHTML = `
-        <h2 class="create-quiz-title">Seu quizz está pronto!</h2>
-        <div class="quiz-creation-banner">
-            <img src="${quizImageUrl}">
-            <p class="quiz-created-title">${quizTitle}</p>
-        </div>
-        <div class="button-container">
-            <button>Acessar Quizz</button>
-            <button onclick="returnMainPage()">Voltar pra home</button>
-        </div>
-    `;    
+  saveLevels();
+  sendQuizz();
+  createQuizScreen.innerHTML = `
+    <h2 class="create-quiz-title">Seu quizz está pronto!</h2>
+    <div class="quiz-creation-banner">
+        <img src="${quizImageUrl}">
+        <p class="quiz-created-title">${quizTitle}</p>
+    </div>
+    <div class="button-container">
+        <button>Acessar Quizz</button>
+        <button onclick="returnMainPage()">Voltar pra home</button>
+    </div>
+    `;
 }
 
 function toggleLevel(levelButton) {
-    const preselected = createQuizScreen.querySelector(".selected-level");
-    preselected.classList.remove("selected-level");
-    preselected.querySelector("ion-icon").classList.remove("hidden");
-    preselected.nextElementSibling.classList.add("hidden");
+  const preselected = createQuizScreen.querySelector(".selected-level");
+  preselected.classList.remove("selected-level");
+  preselected.querySelector("ion-icon").classList.remove("hidden");
+  preselected.nextElementSibling.classList.add("hidden");
 
-    const level = levelButton.parentElement;
-    level.classList.add("selected-level")
-    level.querySelector("ion-icon").classList.add("hidden");
-    level.nextElementSibling.classList.remove("hidden");
+  const level = levelButton.parentElement;
+  level.classList.add("selected-level");
+  level.querySelector("ion-icon").classList.add("hidden");
+  level.nextElementSibling.classList.remove("hidden");
+}
+
+function saveQuestions() {
+  let answers = [];
+  const getValue = (id) => {
+    return document.getElementById(id) !== null
+      ? document.getElementById(id).value
+      : false;
+  };
+
+  for (let i = 1; i <= numberQuestions; i++) {
+    const title = getValue(`q-${i}`);
+    const color = getValue(`bg-${i}`);
+
+    if (title && color) {
+      for (let j = 1; j <= 4; j++) {
+        const text = getValue(`a-${j}${i}`);
+        const image = getValue(`Img-${j}${i}`);
+
+        if (text && image) {
+          answers.push({
+            text,
+            image,
+            isCorrectAnswer: j === 1,
+          });
+        }
+      }
+      questions.push({
+        title,
+        color,
+        answers,
+      });
+      answers = [];
+    }
+  }
 }
 
 function renderLevelsCreation() {
-    let inputs = `
+  saveQuestions();
+  let inputs = `
         <div class="inputs-container">
             <div class="question-banner selected-level">
                 <h3 class="create-quiz-subtitle">Nível 1</h3>
                 <ion-icon name="create-outline" class="hidden" onclick="toggleLevel(this)"></ion-icon>
             </div>
             <div class="question">
-                <input type="text" placeholder="Título do nível">
-                <input type="text" placeholder="% de acerto mínima">
-                <input type="text" placeholder="URL da imagem do nível">
-                <textarea placeholder="Descrição do nível"></textarea>
+                <input id="tL-1" type="text" placeholder="Título do nível">
+                <input id="perc-1" type="text" placeholder="% de acerto mínima">
+                <input id="imgL-1" type="text" placeholder="URL da imagem do nível">
+                <textarea id="l1-desc" placeholder="Descrição do nível"></textarea>
             </div>
         </div>
     `;
-    for (let i = 2; i <= numberLevels; i++) {
-        inputs += `
+  for (let i = 2; i <= numberLevels; i++) {
+    inputs += `
             <div class="inputs-container">
                 <div class="question-banner">
                     <h3 class="create-quiz-subtitle">Nível ${i}</h3>
                     <ion-icon name="create-outline" onclick="toggleLevel(this)"></ion-icon>
                 </div>
                 <div class="question hidden">
-                    <input type="text" placeholder="Título do nível">
-                    <input type="text" placeholder="% de acerto mínima">
-                    <input type="text" placeholder="URL da imagem do nível">
-                    <textarea placeholder="Descrição do nível"></textarea>
+                    <input id="tL-${i}" type="text" placeholder="Título do nível">
+                    <input id="perc-${i}" type="text" placeholder="% de acerto mínima">
+                    <input id="imgL-${i}" type="text" placeholder="URL da imagem do nível">
+                    <textarea id="l${i}-desc" placeholder="Descrição do nível"></textarea>
                 </div>
             </div>
         `;
-    }
+  }
 
-    createQuizScreen.innerHTML = `
+  createQuizScreen.innerHTML = `
         <h2 class="create-quiz-title">Agora, decida os níveis!</h2>
         ${inputs}
         <div class="button-container">
@@ -90,19 +172,19 @@ function renderLevelsCreation() {
 }
 
 function toggleQuestion(questionButton) {
-    const preselected = createQuizScreen.querySelector(".selected-question");
-    preselected.classList.remove("selected-question");
-    preselected.querySelector("ion-icon").classList.remove("hidden");
-    preselected.nextElementSibling.classList.add("hidden");
+  const preselected = createQuizScreen.querySelector(".selected-question");
+  preselected.classList.remove("selected-question");
+  preselected.querySelector("ion-icon").classList.remove("hidden");
+  preselected.nextElementSibling.classList.add("hidden");
 
-    const question = questionButton.parentElement;
-    question.classList.add("selected-question")
-    question.querySelector("ion-icon").classList.add("hidden");
-    question.nextElementSibling.classList.remove("hidden");
+  const question = questionButton.parentElement;
+  question.classList.add("selected-question");
+  question.querySelector("ion-icon").classList.add("hidden");
+  question.nextElementSibling.classList.remove("hidden");
 }
 
 function renderQuestionsCreation() {
-    let inputs = `
+  let inputs = `
         <div class="inputs-container">
             <div class="question-banner selected-question">
                 <h3 class="create-quiz-subtitle">Pergunta 1</h3>
@@ -110,32 +192,32 @@ function renderQuestionsCreation() {
             </div>
             <div class="question">
                 <div class="input-box">
-                    <input type="text" placeholder="Texto da pergunta">
-                    <input type="text" placeholder="Cor de fundo da pergunta">
+                    <input id="q-1" type="text" placeholder="Texto da pergunta">
+                    <input id="bg-1" type="text" placeholder="Cor de fundo da pergunta">
                 </div>
                 <h3 class="create-quiz-subtitle">Resposta correta</h3>
                 <div class="input-box">
-                    <input type="text" placeholder="Resposta correta">
-                    <input type="text" placeholder="URL da imagem">
+                    <input id="a-11" type="text" placeholder="Resposta correta">
+                    <input id="Img-11" type="text" placeholder="URL da imagem">
                 </div>
                 <h3 class="create-quiz-subtitle">Respostas incorretas</h3>
                 <div class="input-box">
-                    <input type="text" placeholder="Resposta incorreta 1">
-                    <input type="text" placeholder="URL da imagem 1">
+                    <input id="a-21" type="text" placeholder="Resposta incorreta 1">
+                    <input id="Img-21" type="text" placeholder="URL da imagem 1">
                 </div>
                 <div class="input-box">
-                    <input type="text" placeholder="Resposta incorreta 2">
-                    <input type="text" placeholder="URL da imagem 2">
+                    <input id="a-31" type="text" placeholder="Resposta incorreta 2">
+                    <input id="Img-31" type="text" placeholder="URL da imagem 2">
                 </div>
                 <div class="input-box">
-                    <input type="text" placeholder="Resposta incorreta 3">
-                    <input type="text" placeholder="URL da imagem 3">
+                    <input id="a-41" type="text" placeholder="Resposta incorreta 3">
+                    <input id="Img-41" type="text" placeholder="URL da imagem 3">
                 </div>
             </div>
         </div>
     `;
-    for (let i = 2; i <= numberQuestions; i++) {
-        inputs += `
+  for (let i = 2; i <= numberQuestions; i++) {
+    inputs += `
             <div class="inputs-container">
                 <div class="question-banner">
                     <h3 class="create-quiz-subtitle">Pergunta ${i}</h3>
@@ -143,33 +225,33 @@ function renderQuestionsCreation() {
                 </div>
                 <div class="question hidden">
                     <div class="input-box">
-                        <input type="text" placeholder="Texto da pergunta">
-                        <input type="text" placeholder="Cor de fundo da pergunta">
+                        <input id="q-${i}" type="text" placeholder="Texto da pergunta">
+                        <input id="bg-${i}" type="text" placeholder="Cor de fundo da pergunta">
                     </div>
                     <h3 class="create-quiz-subtitle">Resposta correta</h3>
                     <div class="input-box">
-                        <input type="text" placeholder="Resposta correta">
-                        <input type="text" placeholder="URL da imagem">
+                        <input id="a-1${i}" type="text" placeholder="Resposta correta">
+                        <input id="Img-1${i}" type="text" placeholder="URL da imagem">
                     </div>
                     <h3 class="create-quiz-subtitle">Respostas incorretas</h3>
                     <div class="input-box">
-                        <input type="text" placeholder="Resposta incorreta 1">
-                        <input type="text" placeholder="URL da imagem 1">
+                        <input id="a-2${i}" type="text" placeholder="Resposta incorreta 1">
+                        <input id="Img-2${i}" type="text" placeholder="URL da imagem 1">
                     </div>
                     <div class="input-box">
-                        <input type="text" placeholder="Resposta incorreta 2">
-                        <input type="text" placeholder="URL da imagem 2">
+                        <input id="a-3${i}" type="text" placeholder="Resposta incorreta 2">
+                        <input id="Img-3${i}" type="text" placeholder="URL da imagem 2">
                     </div>
                     <div class="input-box">
-                        <input type="text" placeholder="Resposta incorreta 3">
-                        <input type="text" placeholder="URL da imagem 3">
+                        <input id="a-4${i}" type="text" placeholder="Resposta incorreta 3">
+                        <input id="Img-4${i}" type="text" placeholder="URL da imagem 3">
                     </div>
                 </div>
             </div>
         `;
-    }
+  }
 
-    createQuizScreen.innerHTML = `
+  createQuizScreen.innerHTML = `
         <h2 class="create-quiz-title">Crie suas perguntas</h2>
         ${inputs}
         <div class="button-container">
@@ -179,9 +261,11 @@ function renderQuestionsCreation() {
 }
 
 function createQuestions() {
-    quizTitle = createQuizScreen.querySelector("#quizTitleCreation").value;
-    quizImageUrl = createQuizScreen.querySelector("#quizImageCreation").value;
-    numberQuestions = createQuizScreen.querySelector("#numberQuestionsCreation").value;
-    numberLevels = createQuizScreen.querySelector("#numberLevelsCreation").value;
-    renderQuestionsCreation();
+  quizTitle = createQuizScreen.querySelector("#quizTitleCreation").value;
+  quizImageUrl = createQuizScreen.querySelector("#quizImageCreation").value;
+  numberQuestions = createQuizScreen.querySelector(
+    "#numberQuestionsCreation"
+  ).value;
+  numberLevels = createQuizScreen.querySelector("#numberLevelsCreation").value;
+  renderQuestionsCreation();
 }
