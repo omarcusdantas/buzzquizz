@@ -2,8 +2,15 @@ const createQuizScreen = document.querySelector(".create-quiz");
 let numberQuestions, numberLevels, quizImageUrl, quizTitle;
 let questions = [],
   levels = [];
+let isEdition = false;
+let id;
 
 function toggleCreateQuiz() {
+  if (arguments[0]) {
+    id = arguments[1];
+    isEdition = true;
+  }
+
   document.querySelector(".page-1").classList.toggle("hidden");
   createQuizScreen.classList.toggle("hidden");
 }
@@ -45,20 +52,18 @@ function sendQuiz() {
     questions,
     levels,
   };
-
-  //   Mandando para o servidor e armazenando localmente
-  /* axios
-    .post("https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes", data)
-    .then((res) => {
-      console.log(res.data);
-      localStorage.setItem(
-        `buzzQuizz-${Object.keys({ ...localStorage }).length}`,
-        JSON.stringify(data)
-      );
-      quizCreated();
-    }); */
-  console.log(data);
-  quizCreated();
+  // Verificando se foi uma edição de um quiz existente
+  if (isEdition) {
+    editQuizz(true, id, data)
+  } else {
+    //   Mandando para o servidor e armazenando localmente
+    axios
+      .post("https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes", data)
+      .then((res) => {
+        localStorage.setItem(res.data.id, JSON.stringify(res.data));
+        quizCreated();
+      });
+  }
 }
 
 function isURL(str) {
@@ -76,24 +81,24 @@ function checkLevels() {
   wrongInput = 0;
   easyLevel = 0;
 
-  levels.forEach ((level) => {
+  levels.forEach((level) => {
     if (level.title.length < 10) {
-      wrongInput ++;
+      wrongInput++;
     };
 
     if (!isURL(level.image)) {
-      wrongInput ++;
+      wrongInput++;
     }
 
     if (parseInt(level.minValue) < 0 || parseInt(level.minValue) > 100 || isNaN(parseInt(level.minValue))) {
-      wrongInput ++;
+      wrongInput++;
     }
 
     if (parseInt(level.minValue) === 0)
-      easyLevel ++;
+      easyLevel++;
 
     if (level.text.length < 30) {
-      wrongInput ++;
+      wrongInput++;
     }
   })
 
@@ -177,7 +182,7 @@ function renderLevelsCreation() {
         <h2 class="create-quiz-title">Agora, decida os níveis!</h2>
         ${inputs}
         <div class="button-container">
-            <button onclick="saveLevels()">Finalizar Quizz</button>
+            <button onclick="saveLevels()">${isEdition ? "Finalizar edição" : "Finalizar Quizz"}</button>
         </div>
     `;
 }
@@ -188,28 +193,28 @@ function checkQuestions() {
 
   questions.forEach((item) => {
     if (item.title.length < 20) {
-      wrongInput ++;
+      wrongInput++;
     };
-    
+
     if (!isHexColor(item.color)) {
-      wrongInput ++;
+      wrongInput++;
     };
 
     if (item.answers.length < 2) {
-      wrongInput ++;
+      wrongInput++;
     }
 
     item.answers.forEach((answer) => {
       if (answer.text == "") {
-        wrongInput ++;
+        wrongInput++;
       }
 
       if (!isURL(answer.image)) {
-        wrongInput ++;
+        wrongInput++;
       }
 
       if (answer.isCorrectAnswer) {
-        correctAnswer ++;
+        correctAnswer++;
       }
     })
   })
@@ -355,21 +360,21 @@ function checkMainInfo() {
   let wrongInput = 0;
 
   if (quizTitle.length < 20 || quizTitle.length > 65) {
-    wrongInput ++;
+    wrongInput++;
   }
 
   if (!isURL(quizImageUrl)) {
-    wrongInput ++;
+    wrongInput++;
   }
 
   if (numberQuestions < 3) {
-    wrongInput ++;
+    wrongInput++;
   }
 
   if (numberLevels < 2) {
-    wrongInput ++;
+    wrongInput++;
   }
-  
+
   if (wrongInput === 0) {
     renderQuestionsCreation();
     return;
@@ -383,6 +388,6 @@ function createQuestions() {
   quizImageUrl = createQuizScreen.querySelector("#quizImageCreation").value;
   numberQuestions = parseInt(createQuizScreen.querySelector("#numberQuestionsCreation").value);
   numberLevels = parseInt(createQuizScreen.querySelector("#numberLevelsCreation").value);
-  
+
   checkMainInfo();
 }

@@ -64,6 +64,8 @@ header {
 
     background-color: #EC362D;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+    cursor: pointer;
 }
 
 .header-title {
@@ -80,28 +82,47 @@ header {
     align-items: flex-start;
 
     max-width: 1050px;
-    width: 90%;
+    width: 85%;
+
+    margin-bottom: 30px;
 }
 
 .my-quizzes {
     display: flex;
-    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
 
     width: 100%;
+
+    gap: 15px;
 }
 
 .my-quizzes-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    gap: 20px
+}
+
+@media screen and (max-width: 480px) {
+    .my-quizzes-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        width: 85%;
+    }
 }
 
 .my-quizzes-header>ion-icon {
     width: 32px;
     height: 32px;
 
+    margin-bottom: 12px;
     color: #EC362D;
+
+    cursor: pointer;
 }
 
 .empty {
@@ -160,7 +181,7 @@ header {
 
 .cards {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: flex-start;
     flex-wrap: wrap;
 
@@ -183,6 +204,9 @@ header {
     height: 181px;
 
     position: relative;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 64.58%, #000000 100%);
+
+    cursor: pointer;
 }
 
 .card>img {
@@ -194,16 +218,22 @@ header {
 
 .card>h2 {
     position: absolute;
-    bottom: 10px;
-    left: 30%;
-    margin: 0 auto;
+    bottom: 0;
+    left: 0;
+
+    width: 85%;
+    height: fit-content;
+
+    text-align: left;
+    word-break: break-all;
+    margin-left: 20px;
+    margin-bottom: 10px;
 
     font-weight: 400;
     font-size: 19px;
     line-height: 22px;
 
     color: #FFFFFF;
-
 }
 
 .edit-quizz {

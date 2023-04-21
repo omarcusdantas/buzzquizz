@@ -15,11 +15,15 @@
     </head>
 
     <body>
-        <header>
+        <header onclick="window.location.reload()">
             <h1 class="header-title">BuzzQuizz</h1>
         </header>
         <!-- Page-1 -->
         <div class="page-1 mt">
+            <div class="my-quizzes-header hidden">
+                <h2 class="section-title">Seus Quizzes</h2>
+                <ion-icon onclick="toggleCreateQuiz()" data-test="create-btn" name="add-circle"></ion-icon>
+            </div>
             <div class="my-quizzes">
                 <div id="empty" class="empty">
                     <p>Você não criou nenhum quizz ainda :(</p>
@@ -41,7 +45,7 @@
                 <div class="banner">
                 </div>
                 <div class="quizz-questions">
-                    
+
                 </div>
             </div>
         </div>
@@ -49,18 +53,18 @@
 
 
         <!-- Page-3 -->
-            <div class="create-quiz hidden">
-                <h2 class="create-quiz-title">Comece pelo começo</h2>
-                <div class="inputs-container">
-                    <input id="quizTitleCreation" type="text" placeholder="Título do seu quiz">
-                    <input id="quizImageCreation" type="text" placeholder="URL da imagem do seu quiz">
-                    <input id="numberQuestionsCreation" type="text" placeholder="Quantidade de perguntas do quiz">
-                    <input id="numberLevelsCreation" type="text" placeholder="Quantidade de níveis do quiz">
-                </div>
-                <div class="button-container">
-                    <button onclick="createQuestions()">Prosseguir pra criar perguntas</button>
-                </div>
+        <div class="create-quiz hidden">
+            <h2 class="create-quiz-title">Comece pelo começo</h2>
+            <div class="inputs-container">
+                <input id="quizTitleCreation" type="text" placeholder="Título do seu quiz">
+                <input id="quizImageCreation" type="text" placeholder="URL da imagem do seu quiz">
+                <input id="numberQuestionsCreation" type="text" placeholder="Quantidade de perguntas do quiz">
+                <input id="numberLevelsCreation" type="text" placeholder="Quantidade de níveis do quiz">
             </div>
+            <div class="button-container">
+                <button onclick="createQuestions()">Prosseguir pra criar perguntas</button>
+            </div>
+        </div>
         <!-- ------------------- -->
 
         <!-- Ion-icon -->
@@ -74,6 +78,7 @@
         <script src="./js/page-1.js"></script>
         <script src="./js/create-quiz.js"></script>
         <script src="./js/quizz.js"></script>
+        <script src="./js/change-quiz.js"></script>
     </body>
 
 </html>

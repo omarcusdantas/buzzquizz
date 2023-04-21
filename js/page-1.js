@@ -7,21 +7,22 @@ const quizzesCard = document.querySelector(".all-quizzes .cards");
 // -------------------------------------
 // Functionalities
 function renderQuizzes(data, htmlElement, isOurQuiz = false) {
-  htmlElement.innerHTML = isOurQuiz
-    ? `<div class="my-quizzes-header">
-        <h2 class="section-title">Seus Quizzes</h2>
-        <ion-icon data-test="create-btn" name="add-circle"></ion-icon>
-      <div>`
-    : "";
+  if (isOurQuiz) {
+    myQuizzes.innerHTML = "";
+    document.querySelector('.my-quizzes-header').classList.remove('hidden');
+  }
 
   data.forEach((quiz) => {
     htmlElement.innerHTML += `
-      <div data-test=${isOurQuiz ? "my-quiz" : "others-quiz"} class="card">
+      <div onclick="getSingleQuizz(${quiz.id})" data-test=${isOurQuiz ? "my-quiz" : "others-quiz"
+      } class="card">
         <img src=${quiz.image} />
         <h2>${quiz.title}</h2>
         <div class="edit-quizz ${isOurQuiz ? "" : "hidden"}">
-          <ion-icon onclick="editQuizz()" data-test="edit" id="edit-quizz" name="create"></ion-icon>
-          <ion-icon onclick="deleteQuizz()" data-test="delete" id="delete-quizz" name="trash"></ion-icon>
+          <ion-icon onclick="editQuizz(${false},${quiz.id
+      })" data-test="edit" id="edit-quizz" name="create"></ion-icon>
+          <ion-icon onclick="deleteQuizz(${quiz.id
+      })" data-test="delete" id="delete-quizz" name="trash"></ion-icon>
         </div>
       </div>      
     `;
@@ -30,16 +31,19 @@ function renderQuizzes(data, htmlElement, isOurQuiz = false) {
 
 // Quizzes Request
 axios.get(getQuizzesURL).then((res) => {
-  const localKeys = Object.keys({ ...localStorage }).filter((key) =>
-    // Convenção do valor para os quizzezs criados, para indentificação
-    key.match(/(buzzQuizz-\w+)/)
-  );
+  const localKeys = Object.keys({ ...localStorage });
   const ourQuizzes = localKeys.map((key) =>
     JSON.parse(localStorage.getItem(key))
   );
 
-  renderQuizzes(res.data, quizzesCard);
   if (Object.keys(ourQuizzes).length) {
+    // Filtrando os quizzes que não são os nossos
+    const allQuizzes = res.data.filter(
+      (quiz) => !localKeys.map((json) => +json).includes(quiz.id)
+    );
+    renderQuizzes(allQuizzes, quizzesCard);
     renderQuizzes(ourQuizzes, myQuizzes, true);
+  } else {
+    renderQuizzes(res.data, quizzesCard);
   }
 });
