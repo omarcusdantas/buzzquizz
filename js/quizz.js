@@ -56,7 +56,7 @@ function displayQuizz(data){
             options_div.innerHTML += `
                 <div class="answer" onclick="selectAnswer(this)" data-test="answer">
                     <img src="${answer.image}" />
-                    <h3 data-test="answer-test">${answer.text}</h3>
+                    <h3 data-test="answer-text">${answer.text}</h3>
                 </div>
             `;
 
