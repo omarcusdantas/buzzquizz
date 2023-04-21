@@ -14,7 +14,7 @@ function renderQuizzes(data, htmlElement, isOurQuiz = false) {
 
   data.forEach((quiz) => {
     htmlElement.innerHTML += `
-      <div onclick="getSingleQuizz(${quiz.id})" data-test=${isOurQuiz ? "my-quiz" : "others-quiz"
+      <div onclick="toggleQuizzPage(${quiz.id})" data-test=${isOurQuiz ? "my-quiz" : "others-quiz"
       } class="card">
         <img src=${quiz.image} />
         <h2>${quiz.title}</h2>
@@ -30,20 +30,19 @@ function renderQuizzes(data, htmlElement, isOurQuiz = false) {
 }
 
 // Quizzes Request
-axios.get(getQuizzesURL).then((res) => {
-  const localKeys = Object.keys({ ...localStorage });
-  const ourQuizzes = localKeys.map((key) =>
-    JSON.parse(localStorage.getItem(key))
-  );
-
-  if (Object.keys(ourQuizzes).length) {
-    // Filtrando os quizzes que não são os nossos
-    const allQuizzes = res.data.filter(
-      (quiz) => !localKeys.map((json) => +json).includes(quiz.id)
-    );
-    renderQuizzes(allQuizzes, quizzesCard);
-    renderQuizzes(ourQuizzes, myQuizzes, true);
-  } else {
-    renderQuizzes(res.data, quizzesCard);
-  }
-});
+ axios.get(getQuizzesURL).then((res) => {
+   const localKeys = Object.keys({ ...localStorage });
+   const ourQuizzes = localKeys.map((key) =>
+     JSON.parse(localStorage.getItem(key))
+   )
+   if (Object.keys(ourQuizzes).length) {
+     // Filtrando os quizzes que não são os nossos
+     const allQuizzes = res.data.filter(
+       (quiz) => !localKeys.map((json) => +json).includes(quiz.id)
+     );
+     renderQuizzes(allQuizzes, quizzesCard);
+     renderQuizzes(ourQuizzes, myQuizzes, true);
+   } else {
+     renderQuizzes(res.data, quizzesCard);
+   }
+ });
