@@ -41,7 +41,7 @@ function displayQuizz(data){
     data.questions.forEach(question => {
         quizzQuestions.innerHTML += `
             <div class="question to-answer" data-test="question">
-                <div class="title" data-test="question-title">
+                <div class="title" style="background-color: ${question.color}" data-test="question-title">
                     <h2>${question.title}</h2>
                 </div>
                 <div class="options">
