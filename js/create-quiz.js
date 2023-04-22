@@ -36,12 +36,24 @@ function returnMainPage() {
         <div class="button-container">
             <button onclick="createQuestions()" data-test="go-create-questions">Prosseguir pra criar perguntas</button>
         </div>
-    `;
+  `;
 }
 
 function accessCreatedQuiz(id) {
   toggleCreateQuiz();
   toggleQuizzPage(id);
+  createQuizScreen.innerHTML = `
+        <h2 class="create-quiz-title">Comece pelo começo</h2>
+        <div class="inputs-container">
+            <input id="quizTitleCreation" type="text" placeholder="Título do seu quiz" data-test="title-input">
+            <input id="quizImageCreation" type="text" placeholder="URL da imagem do seu quiz" data-test="img-input">
+            <input id="numberQuestionsCreation" type="text" placeholder="Quantidade de perguntas do quiz" data-test="questions-amount-input">
+            <input id="numberLevelsCreation" type="text" placeholder="Quantidade de níveis do quiz" data-test="levels-amount-input">
+        </div>
+        <div class="button-container">
+            <button onclick="createQuestions()" data-test="go-create-questions">Prosseguir pra criar perguntas</button>
+        </div>
+  `;
 }
 
 function quizCreated(id) {
@@ -70,11 +82,9 @@ function sendQuiz() {
     editQuizz(true, id, data)
   } else {
     //   Mandando para o servidor e armazenando localmente
-    document.querySelector('.loading-screen').classList.remove('hidden');
     axios
       .post("https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes", data)
       .then((res) => {
-        document.querySelector('.loading-screen').classList.add('hidden');
         localStorage.setItem(`buzzQuizz-${res.data.id}`, JSON.stringify(res.data));
         quizCreated(res.data.id);
       });
