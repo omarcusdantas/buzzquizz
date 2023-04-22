@@ -56,15 +56,15 @@ function accessCreatedQuiz(id) {
   `;
 }
 
-function quizCreated(id) {
+function quizCreated(quizData) {
   createQuizScreen.innerHTML = `
     <h2 class="create-quiz-title">Seu quizz está pronto!</h2>
     <div class="quiz-creation-banner" data-test="success-banner">
-        <img src="${quizImageUrl}">
-        <p class="quiz-created-title">${quizTitle}</p>
+        <img src="${quizData.image}">
+        <p class="quiz-created-title">${quizData.title}</p>
     </div>
     <div class="button-container">
-        <button onclick="accessCreatedQuiz(${id})" data-test="go-quiz">Acessar Quizz</button>
+        <button onclick="accessCreatedQuiz(${quizData.id})" data-test="go-quiz">Acessar Quizz</button>
         <button onclick="returnMainPage()" data-test="go-home">Voltar pra home</button>
     </div>
     `;
@@ -86,7 +86,7 @@ function sendQuiz() {
       .post("https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes", data)
       .then((res) => {
         localStorage.setItem(`buzzQuizz-${res.data.id}`, JSON.stringify(res.data));
-        quizCreated(res.data.id);
+        quizCreated(res.data);
       });
   }
 }
