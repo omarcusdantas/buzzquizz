@@ -15,6 +15,11 @@
     position: relative;
 }
 
+.quiz-creation-banner img {
+    width: 340px;
+    height: 181px;
+}
+
 .quiz-created-title {
     color: #FFFFFF;
     font-size: 19px;
@@ -131,6 +136,11 @@
         width: 500px;
         height: 266px;
         margin-bottom: 0;
+    }
+
+    .quiz-creation-banner img {
+        width: 500px;
+        height: 266px;
     }
 
     .quiz-created-title {
