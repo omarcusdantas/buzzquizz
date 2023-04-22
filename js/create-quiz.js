@@ -39,7 +39,12 @@ function returnMainPage() {
     `;
 }
 
-function quizCreated() {
+function accessCreatedQuiz(id) {
+  toggleCreateQuiz();
+  toggleQuizzPage(id);
+}
+
+function quizCreated(id) {
   createQuizScreen.innerHTML = `
     <h2 class="create-quiz-title">Seu quizz está pronto!</h2>
     <div class="quiz-creation-banner">
@@ -47,7 +52,7 @@ function quizCreated() {
         <p class="quiz-created-title">${quizTitle}</p>
     </div>
     <div class="button-container">
-        <button>Acessar Quizz</button>
+        <button onclick="accessCreatedQuiz(${id})">Acessar Quizz</button>
         <button onclick="returnMainPage()">Voltar pra home</button>
     </div>
     `;
@@ -71,7 +76,7 @@ function sendQuiz() {
       .then((res) => {
         document.querySelector('.loading-screen').classList.add('hidden');
         localStorage.setItem(`buzzQuizz-${res.data.id}`, JSON.stringify(res.data));
-        quizCreated();
+        quizCreated(res.data.id);
       });
   }
 }
