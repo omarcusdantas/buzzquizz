@@ -4,11 +4,19 @@ let questions = [],
   levels = [];
 let isEdition = false;
 let id;
+let oldData;
 
 function toggleCreateQuiz() {
   if (arguments[0]) {
     id = arguments[1];
     isEdition = true;
+    oldData = arguments[2];
+    // Preenchendo os inputs da main info com os dados do quiz no server
+    quizTitle = createQuizScreen.querySelector("#quizTitleCreation").value = oldData.title;
+    quizImageUrl = createQuizScreen.querySelector("#quizImageCreation").value = oldData.image;
+    numberQuestions = createQuizScreen.querySelector("#numberQuestionsCreation").value = oldData.questions.length;
+    numberLevels = createQuizScreen.querySelector("#numberLevelsCreation").value = oldData.levels.length;
+
   }
 
   document.querySelector(".page-1").classList.toggle("hidden");
@@ -57,10 +65,12 @@ function sendQuiz() {
     editQuizz(true, id, data)
   } else {
     //   Mandando para o servidor e armazenando localmente
+    document.querySelector('.loading-screen').classList.remove('hidden');
     axios
       .post("https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes", data)
       .then((res) => {
-        localStorage.setItem(res.data.id, JSON.stringify(res.data));
+        document.querySelector('.loading-screen').classList.add('hidden');
+        localStorage.setItem(`buzzQuizz-${res.data.id}`, JSON.stringify(res.data));
         quizCreated();
       });
   }
@@ -185,6 +195,7 @@ function renderLevelsCreation() {
             <button onclick="saveLevels()">${isEdition ? "Finalizar edição" : "Finalizar Quizz"}</button>
         </div>
     `;
+  if (isEdition) retrieveDataLevels(oldData); 
 }
 
 function checkQuestions() {
@@ -354,6 +365,7 @@ function renderQuestionsCreation() {
             <button onclick="saveQuestions()">Prosseguir pra criar níveis</button>
         </div>
     `;
+  if (isEdition) retrieveDataQuestions(oldData); 
 }
 
 function checkMainInfo() {

@@ -75,6 +75,55 @@ header {
     color: rgba(255, 255, 255, 1);
 }
 
+.loading-screen {
+    position: fixed;
+
+    z-index: 10;
+
+    width: 100%;
+    height: 100%;
+
+    background-color: #FFF;
+}
+
+.loading-screen>h1 {
+    position: absolute;
+    top: 65%;
+    left: 45%;
+
+    font-weight: 400;
+    font-size: 25px;
+    line-height: 29px;
+
+    color: #EC362D;
+}
+
+.loader {
+    position: absolute;
+
+    top: 45%;
+    left: 45%;
+
+    border: 16px solid #f3f3f3;
+    /* Light grey */
+    border-top: 16px solid #EC362D;
+    /* Blue */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 /* Page 1 */
 .page-1 {
     display: flex;

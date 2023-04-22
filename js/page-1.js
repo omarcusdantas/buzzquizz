@@ -19,9 +19,9 @@ function renderQuizzes(data, htmlElement, isOurQuiz = false) {
         <img src=${quiz.image} />
         <h2>${quiz.title}</h2>
         <div class="edit-quizz ${isOurQuiz ? "" : "hidden"}">
-          <ion-icon onclick="editQuizz(${false},${quiz.id
+          <ion-icon onclick="event.stopPropagation(); editQuizz(${false},${quiz.id
       })" data-test="edit" id="edit-quizz" name="create"></ion-icon>
-          <ion-icon onclick="deleteQuizz(${quiz.id
+          <ion-icon onclick="event.stopPropagation(); deleteQuizz(${quiz.id
       })" data-test="delete" id="delete-quizz" name="trash"></ion-icon>
         </div>
       </div>      
@@ -30,19 +30,24 @@ function renderQuizzes(data, htmlElement, isOurQuiz = false) {
 }
 
 // Quizzes Request
- axios.get(getQuizzesURL).then((res) => {
-   const localKeys = Object.keys({ ...localStorage });
-   const ourQuizzes = localKeys.map((key) =>
-     JSON.parse(localStorage.getItem(key))
-   )
-   if (Object.keys(ourQuizzes).length) {
-     // Filtrando os quizzes que não são os nossos
-     const allQuizzes = res.data.filter(
-       (quiz) => !localKeys.map((json) => +json).includes(quiz.id)
-     );
-     renderQuizzes(allQuizzes, quizzesCard);
-     renderQuizzes(ourQuizzes, myQuizzes, true);
-   } else {
-     renderQuizzes(res.data, quizzesCard);
-   }
- });
+axios.get(getQuizzesURL).then((res) => {
+  document.querySelector('.loading-screen').classList.add('hidden');
+  const localKeys = Object.keys({ ...localStorage });
+  const keysBuzzQuizz = localKeys.filter(key => {
+    return key.match(/(buzzQuizz-\d+)/)
+  });
+
+  const ourQuizzes = keysBuzzQuizz.map((key) =>
+    JSON.parse(localStorage.getItem(key))
+  )
+  if (Object.keys(ourQuizzes).length) {
+    // Filtrando os quizzes que não são os nossos
+    const allQuizzes = res.data.filter(
+      (quiz) => !keysBuzzQuizz.includes(`buzzQuizz-${quiz.id}`)
+    );
+    renderQuizzes(allQuizzes, quizzesCard);
+    renderQuizzes(ourQuizzes, myQuizzes, true);
+  } else {
+    renderQuizzes(res.data, quizzesCard);
+  }
+});

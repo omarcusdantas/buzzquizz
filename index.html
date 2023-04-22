@@ -18,11 +18,15 @@
         <header onclick="window.location.reload()">
             <h1 class="header-title">BuzzQuizz</h1>
         </header>
+        <div data-test="spinner" class="loading-screen">
+            <div class="loader"></div>
+            <h1>Carregando</h1>
+        </div>
         <!-- Page-1 -->
         <div class="page-1 mt">
             <div class="my-quizzes-header hidden">
                 <h2 class="section-title">Seus Quizzes</h2>
-                <ion-icon onclick="toggleCreateQuiz()" data-test="create-btn" name="add-circle"></ion-icon>
+                <ion-icon data-test="create-btn" onclick="toggleCreateQuiz()" name="add-circle"></ion-icon>
             </div>
             <div class="my-quizzes">
                 <div id="empty" class="empty">

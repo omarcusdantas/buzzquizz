@@ -11,6 +11,7 @@ let quizzLevels, quizzData;
 // Functionalities
 
 function toggleQuizzPage(id) {
+    document.querySelector('.loading-screen').classList.remove('hidden');
     document.querySelector(".page-1").classList.toggle("hidden");
     page2.classList.toggle("hidden");
     getSingleQuizz(id);
@@ -18,8 +19,9 @@ function toggleQuizzPage(id) {
 
 // Quizz request by id
 function getSingleQuizz(id) {
-    const res = axios.get('https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes/'+id)
+    axios.get('https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes/'+id)
     .then(data => {
+        document.querySelector('.loading-screen').classList.add('hidden');
         quizzData = data.data;
         displayQuizz(quizzData);
         // Reseting parameters for this quizz
