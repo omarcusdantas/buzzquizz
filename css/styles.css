@@ -144,6 +144,7 @@ header {
     width: 100%;
 
     gap: 15px;
+    flex-wrap: wrap;
 }
 
 .my-quizzes-header {
@@ -245,6 +246,14 @@ header {
         justify-content: flex-start;
 
         gap: 15px;
+    }
+}
+
+@media screen and (max-width: 1235px) {
+
+    .cards,
+    .my-quizzes {
+        justify-content: center;
     }
 }
 

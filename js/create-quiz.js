@@ -179,7 +179,7 @@ function renderLevelsCreation() {
         <div class="inputs-container" data-test="level-ctn">
             <div class="question-banner selected-level">
                 <h3 class="create-quiz-subtitle">Nível 1</h3>
-                <ion-icon name="create-outline" class="hidden" onclick="toggleLevel(this)"></ion-icon>
+                <ion-icon name="create-outline" class="hidden" onclick="toggleLevel(this)" data-test="toggle"></ion-icon>
             </div>
             <div class="question">
                 <input id="tL-1" type="text" placeholder="Título do nível" data-test="level-input">

@@ -34,19 +34,17 @@ function deleteQuizz(id) {
   const confirmation = confirm("Tem certeza que quer deletar esse quiz?");
   if (confirmation) {
     document.querySelector('.loading-screen').classList.remove('hidden');
-  const config = setData(id);
-  axios
-    .delete(urlAPI + `/${id}`, config)
-    .then(() => {
-      document.querySelector('.loading-screen').classList.add('hidden');
-      localStorage.removeItem(`buzzQuizz-${id}`);
-      alert("Quiz deletado com sucesso!");
-      window.location.reload();
-    })
-    .catch(() => {
-      alert("Ocorreu um erro ao deletar o quiz.");
-      window.location.reload();
-    });
+    const config = setData(id);
+    axios
+      .delete(urlAPI + `/${id}`, config)
+      .then(() => {
+        localStorage.removeItem(`buzzQuizz-${id}`);
+        window.location.reload();
+      })
+      .catch(() => {
+        alert("Ocorreu um erro ao deletar o quiz.");
+        window.location.reload();
+      });
   }
 }
 
