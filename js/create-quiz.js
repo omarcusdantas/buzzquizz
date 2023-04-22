@@ -56,21 +56,22 @@ function accessCreatedQuiz(id) {
   `;
 }
 
-function quizCreated(id) {
+function quizCreated(quizData) {
   createQuizScreen.innerHTML = `
     <h2 class="create-quiz-title">Seu quizz está pronto!</h2>
     <div class="quiz-creation-banner" data-test="success-banner">
-        <img src="${quizImageUrl}">
-        <p class="quiz-created-title">${quizTitle}</p>
+        <img src="${quizData.image}">
+        <p class="quiz-created-title">${quizData.title}</p>
     </div>
     <div class="button-container">
-        <button onclick="accessCreatedQuiz(${id})" data-test="go-quiz">Acessar Quizz</button>
+        <button onclick="accessCreatedQuiz(${quizData.id})" data-test="go-quiz">Acessar Quizz</button>
         <button onclick="returnMainPage()" data-test="go-home">Voltar pra home</button>
     </div>
     `;
 }
 
 function sendQuiz() {
+  document.querySelector('.loading-screen').classList.remove('hidden');
   const data = {
     title: quizTitle,
     image: quizImageUrl,
@@ -85,8 +86,10 @@ function sendQuiz() {
     axios
       .post("https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes", data)
       .then((res) => {
+        console.log(res)
+        document.querySelector('.loading-screen').classList.add('hidden');
         localStorage.setItem(`buzzQuizz-${res.data.id}`, JSON.stringify(res.data));
-        quizCreated(res.data.id);
+        quizCreated(res.data);
       });
   }
 }
@@ -176,7 +179,7 @@ function renderLevelsCreation() {
         <div class="inputs-container" data-test="level-ctn">
             <div class="question-banner selected-level">
                 <h3 class="create-quiz-subtitle">Nível 1</h3>
-                <ion-icon name="create-outline" class="hidden" onclick="toggleLevel(this)" data-test="toggle"></ion-icon>
+                <ion-icon name="create-outline" class="hidden" onclick="toggleLevel(this)"></ion-icon>
             </div>
             <div class="question">
                 <input id="tL-1" type="text" placeholder="Título do nível" data-test="level-input">
@@ -210,7 +213,7 @@ function renderLevelsCreation() {
             <button onclick="saveLevels()" data-test="finish">${isEdition ? "Finalizar edição" : "Finalizar Quizz"}</button>
         </div>
     `;
-  if (isEdition) retrieveDataLevels(oldData); 
+  if (isEdition) retrieveDataLevels(oldData);
 }
 
 function checkQuestions() {
@@ -249,9 +252,6 @@ function checkQuestions() {
     renderLevelsCreation();
     return;
   }
-  console.log(wrongAnswer);
-  console.log(correctAnswer);
-  console.log(wrongInput);
   alert("Preencha corretamente");
 }
 
@@ -380,7 +380,7 @@ function renderQuestionsCreation() {
             <button onclick="saveQuestions()" data-test="go-create-levels">Prosseguir pra criar níveis</button>
         </div>
     `;
-  if (isEdition) retrieveDataQuestions(oldData); 
+  if (isEdition) retrieveDataQuestions(oldData);
 }
 
 function checkMainInfo() {
