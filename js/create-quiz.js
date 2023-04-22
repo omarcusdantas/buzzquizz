@@ -249,9 +249,6 @@ function checkQuestions() {
     renderLevelsCreation();
     return;
   }
-  console.log(wrongAnswer);
-  console.log(correctAnswer);
-  console.log(wrongInput);
   alert("Preencha corretamente");
 }
 
