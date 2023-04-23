@@ -1,5 +1,5 @@
 const createQuizScreen = document.querySelector(".create-quiz");
-let numberQuestions, numberLevels, quizImageUrl, quizTitle;
+let numberQuestions, numberQuestionsElement, numberLevels, numberLevelsElement, quizImageUrl, quizImageUrlElement, quizTitle, quizTitleElement;
 let questions = [],
   levels = [];
 let isEdition = false;
@@ -83,11 +83,11 @@ function sendQuiz() {
     editQuizz(true, id, data)
   } else {
     //   Mandando para o servidor e armazenando localmente
+    document.querySelector(".loading-screen").classList.remove("hidden");
     axios
       .post("https://mock-api.driven.com.br/api/vm/buzzquizz/quizzes", data)
       .then((res) => {
-        console.log(res)
-        document.querySelector('.loading-screen').classList.add('hidden');
+        document.querySelector(".loading-screen").classList.add("hidden");
         localStorage.setItem(`buzzQuizz-${res.data.id}`, JSON.stringify(res.data));
         quizCreated(res.data);
       });
@@ -105,20 +105,25 @@ function isHexColor(str) {
 }
 
 function checkLevels() {
-  let wrongInput, easyLevel;
-  wrongInput = 0;
-  easyLevel = 0;
+  let wrongInput = 0;
+  let easyLevel = 0;
 
-  levels.forEach((level) => {
+  levels.forEach((level, index) => {
     if (level.title.length < 10) {
+      createQuizScreen.querySelector(`#tL-${index+1}`).classList.add("wrong-input");
+      createQuizScreen.querySelector(`#tL-${index+1}`).insertAdjacentHTML('afterend', '<p class="requirement-input">O título do nível deve ter no mínimo 10 caracteres</p>');
       wrongInput++;
     };
 
     if (!isURL(level.image)) {
+      createQuizScreen.querySelector(`#imgL-${index+1}`).classList.add("wrong-input");
+      createQuizScreen.querySelector(`#imgL-${index+1}`).insertAdjacentHTML('afterend', '<p class="requirement-input">O valor informado não é uma URL válida</p>');
       wrongInput++;
     }
 
     if (parseInt(level.minValue) < 0 || parseInt(level.minValue) > 100 || isNaN(parseInt(level.minValue))) {
+      createQuizScreen.querySelector(`#perc-${index+1}`).classList.add("wrong-input");
+      createQuizScreen.querySelector(`#perc-${index+1}`).insertAdjacentHTML('afterend', '<p class="requirement-input">A porcentagem deve ser entre 0 e 100</p>');
       wrongInput++;
     }
 
@@ -126,6 +131,8 @@ function checkLevels() {
       easyLevel++;
 
     if (level.text.length < 30) {
+      createQuizScreen.querySelector(`#l${index+1}-desc`).classList.add("wrong-input");
+      createQuizScreen.querySelector(`#l${index+1}-desc`).insertAdjacentHTML('afterend', '<p class="requirement-input">A descrição deve ter no mínimo 30 caracteres</p>');
       wrongInput++;
     }
   })
@@ -220,12 +227,16 @@ function checkQuestions() {
   let wrongInput = 0;
   let correctAnswer = 0;
 
-  questions.forEach((item) => {
+  questions.forEach((item, index) => {
     if (item.title.length < 20) {
+      createQuizScreen.querySelector(`#q-${index+1}`).classList.add("wrong-input");
+      createQuizScreen.querySelector(`#q-${index+1}`).insertAdjacentHTML('afterend', '<p class="requirement-input">A pergunta deve ter no mínimo 20 caracteres</p>');
       wrongInput++;
     };
 
     if (!isHexColor(item.color)) {
+      createQuizScreen.querySelector(`#bg-${index+1}`).classList.add("wrong-input");
+      createQuizScreen.querySelector(`#bg-${index+1}`).insertAdjacentHTML('afterend', '<p class="requirement-input">O valor não é uma cor hexadecimal</p>');
       wrongInput++;
     };
 
@@ -233,12 +244,16 @@ function checkQuestions() {
       wrongInput++;
     }
 
-    item.answers.forEach((answer) => {
+    item.answers.forEach((answer, number) => {
       if (answer.text == "") {
+        createQuizScreen.querySelector(`#a-${number+1}${index+1}`).classList.add("wrong-input");
+        createQuizScreen.querySelector(`#a-${number+1}${index+1}`).insertAdjacentHTML('afterend', '<p class="requirement-input">O texto não pode estar vazio</p>');
         wrongInput++;
       }
 
       if (!isURL(answer.image)) {
+        createQuizScreen.querySelector(`#Img-${number+1}${index+1}`).classList.add("wrong-input");
+        createQuizScreen.querySelector(`#Img-${number+1}${index+1}`).insertAdjacentHTML('afterend', '<p class="requirement-input">O valor informado não é uma URL válida</p>');
         wrongInput++;
       }
 
@@ -387,18 +402,26 @@ function checkMainInfo() {
   let wrongInput = 0;
 
   if (quizTitle.length < 20 || quizTitle.length > 65) {
+    quizTitleElement.classList.add("wrong-input");
+    quizTitleElement.insertAdjacentHTML('afterend', '<p class="requirement-input">O título deve ter entre 20 a 65 caracteres</p>');
     wrongInput++;
   }
 
   if (!isURL(quizImageUrl)) {
+    quizImageUrlElement.classList.add("wrong-input");
+    quizImageUrlElement.insertAdjacentHTML('afterend', '<p class="requirement-input">O valor informado não é uma URL válida</p>');
     wrongInput++;
   }
 
   if (numberQuestions < 3) {
+    numberQuestionsElement.classList.add("wrong-input");
+    numberQuestionsElement.insertAdjacentHTML('afterend', '<p class="requirement-input">O quizz deve ter no mínimo 3 perguntas</p>');
     wrongInput++;
   }
 
   if (numberLevels < 2) {
+    numberLevelsElement.classList.add("wrong-input");
+    numberLevelsElement.insertAdjacentHTML('afterend', '<p class="requirement-input">O quizz deve ter no mínimo 2 níveis</p>');
     wrongInput++;
   }
 
@@ -411,10 +434,14 @@ function checkMainInfo() {
 }
 
 function createQuestions() {
-  quizTitle = createQuizScreen.querySelector("#quizTitleCreation").value;
-  quizImageUrl = createQuizScreen.querySelector("#quizImageCreation").value;
-  numberQuestions = parseInt(createQuizScreen.querySelector("#numberQuestionsCreation").value);
-  numberLevels = parseInt(createQuizScreen.querySelector("#numberLevelsCreation").value);
+  quizTitleElement = createQuizScreen.querySelector("#quizTitleCreation");
+  quizImageUrlElement = createQuizScreen.querySelector("#quizImageCreation");
+  numberQuestionsElement = createQuizScreen.querySelector("#numberQuestionsCreation");
+  numberLevelsElement = createQuizScreen.querySelector("#numberLevelsCreation");
+  quizTitle = quizTitleElement.value;
+  quizImageUrl = quizImageUrlElement.value;
+  numberQuestions = parseInt(numberQuestionsElement.value);
+  numberLevels = parseInt(numberLevelsElement.value);
 
   checkMainInfo();
 }

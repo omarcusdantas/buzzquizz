@@ -7,6 +7,10 @@
     align-items: center;
 }
 
+.create-quiz ion-icon{
+    cursor: pointer;
+}
+
 .quiz-creation-banner {
     width: 340px;
     height: 181px;
@@ -134,6 +138,17 @@
 .create-quiz button:nth-child(2) {
     background-color: #FAFAFA;
     color: #818181;
+}
+
+.wrong-input {
+    background-color: #ffe9e9;
+}
+
+.requirement-input {
+    color: #ec362d;
+    font-size: 16px;
+    width: 100%;
+    margin: -3px 0 15px 0;
 }
 
 @media (min-width: 1100px) {
